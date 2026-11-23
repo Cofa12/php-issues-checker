@@ -1,5 +1,9 @@
 # PHP Issues Checker
 
+[![CI](https://github.com/Cofa12/php-issues-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/Cofa12/php-issues-checker/actions/workflows/ci.yml)
+![PHP](https://img.shields.io/badge/PHP-7.4%20%E2%80%93%208.5-777BB4?logo=php&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 Checks the **PHP runtime** your project runs on against the issues the **PHP project itself** has officially reported, and tells you how to protect yourself.
 
 It runs automatically after every `composer install` / `composer update`, and you can run it by hand or in CI.
@@ -207,8 +211,22 @@ Never expose this page publicly: it tells attackers exactly what is vulnerable.
 ```bash
 composer install
 composer test            # PHPUnit
+composer lint            # code style check (PHP-CS-Fixer, PSR-12); composer lint:fix to fix
+composer analyse         # static analysis (PHPStan)
+composer check           # all three
 composer update-data     # refresh data/snapshot.json before a release
 ```
+
+### CI/CD
+
+GitHub Actions runs on every push to `main` and every pull request:
+
+| Job | What it does |
+|---|---|
+| Lint & static analysis | `composer validate`, PHP-CS-Fixer (PSR-12), PHPStan |
+| Tests (PHP 7.4 → 8.5) | `php -l` syntax check, PHPUnit, and a smoke test of the CLI on every supported PHP version |
+
+Releasing: bump `VERSION` in `src/Cli/Application.php`, commit, then push a tag (`git tag v0.2.0 && git push origin v0.2.0`). The release workflow runs the full CI, checks the tag matches the version, and publishes a GitHub release with generated notes. Packagist picks up the new tag automatically.
 
 ## License
 

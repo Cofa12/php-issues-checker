@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint & static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      - name: Code style (PHP-CS-Fixer, PSR-12)
+        run: composer lint
+
+      - name: Static analysis (PHPStan)
+        run: composer analyse
+
+  tests:
+    name: Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Syntax check (php -l)
+        run: |
+          find src tests scripts -name '*.php' -print0 | xargs -0 -n1 php -l
+          php -l bin/php-issues-check
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      - name: Unit tests
+        run: vendor/bin/phpunit
+
+      - name: Smoke test the CLI
+        run: |
+          bin/php-issues-check --offline --compact --no-color
+          bin/php-issues-check --offline --format=json > report.json
+          php -r 'json_decode(file_get_contents("report.json"), false, 512, JSON_THROW_ON_ERROR); echo "JSON report OK\n";'

@@ -13,7 +13,7 @@ use PhpIssuesChecker\Report\TextReporter;
 
 final class Application
 {
-    public const VERSION = '0.1.0';
+    public const VERSION = '0.2.0';
 
     public const EXIT_OK = 0;
     public const EXIT_ISSUES = 1;

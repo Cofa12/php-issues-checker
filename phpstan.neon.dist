@@ -1,0 +1,8 @@
+parameters:
+    level: 5
+    phpVersion: 70400
+    paths:
+        - src
+        - tests
+    # Data arrays come from JSON; don't treat their docblock shapes as guaranteed.
+    treatPhpDocTypesAsCertain: false

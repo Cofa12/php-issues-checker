@@ -24,13 +24,20 @@ final class ChecksTest extends TestCase
         return (new DataProvider(true, null, 0, null, __DIR__ . '/Fixtures/snapshot.json'))->load();
     }
 
-    /** @param string[] $extensions */
+    /**
+     * @param string[]                  $extensions
+     * @param array<string, string>|null $ini
+     */
     private function env(string $version, string $sapi = 'cli', array $extensions = ['core', 'standard'], ?array $ini = []): Environment
     {
         return new Environment($version, $sapi, $extensions, $ini, '/etc/php.ini');
     }
 
-    /** @param Finding[] $findings @return string[] */
+    /**
+     * @param Finding[] $findings
+     *
+     * @return string[]
+     */
     private function ids(array $findings): array
     {
         return array_map(static function (Finding $f): string {

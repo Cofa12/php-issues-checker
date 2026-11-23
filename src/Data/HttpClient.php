@@ -46,6 +46,9 @@ class HttpClient
     private function viaCurl(string $url, array $headers): string
     {
         $ch = curl_init($url);
+        if ($ch === false) {
+            throw new \RuntimeException(sprintf('Could not start a request to %s', $url));
+        }
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,

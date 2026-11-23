@@ -170,7 +170,7 @@ final class IniSettingsCheck implements Check
                     return trim($v) === '';
                 },
                 'recommended' => 'open_basedir = /var/www/your-app:/tmp',
-                'why' => 'Limits which directories PHP can read and write, so a path-traversal bug cannot reach /etc or other sites.',
+                'why' => 'Limits which directories PHP can read and write, so a path-traversal bug cannot reach /etc or other sites. Set it in the php.ini your web server uses (PHP-FPM / Apache), not the command-line one: in the CLI it breaks Composer and other tools.',
                 'url' => self::MANUAL . 'ini.core.php#ini.open-basedir',
             ],
         ];

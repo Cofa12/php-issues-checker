@@ -16,6 +16,8 @@
     },
     "require-dev": {
         "composer/composer": "^2.0",
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^9.6"
     },
     "autoload": {
@@ -36,6 +38,10 @@
     },
     "scripts": {
         "test": "phpunit",
+        "lint": "php-cs-fixer check --diff",
+        "lint:fix": "php-cs-fixer fix",
+        "analyse": "phpstan analyse --no-progress",
+        "check": ["@lint", "@analyse", "@test"],
         "update-data": "@php scripts/update-data.php"
     },
     "config": {

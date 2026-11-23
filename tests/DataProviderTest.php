@@ -27,7 +27,7 @@ final class DataProviderTest extends TestCase
 
     public function testFallsBackToBundledSnapshotWhenOffline(): void
     {
-        $failing = new class extends HttpClient {
+        $failing = new class () extends HttpClient {
             public function getJson(string $url, array $headers = [])
             {
                 throw new \RuntimeException('no network');
@@ -42,7 +42,7 @@ final class DataProviderTest extends TestCase
 
     public function testLiveDataIsNormalizedAndCached(): void
     {
-        $fake = new class extends HttpClient {
+        $fake = new class () extends HttpClient {
             public int $calls = 0;
 
             public function getJson(string $url, array $headers = [])

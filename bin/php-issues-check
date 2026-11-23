@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+$autoloaders = [
+    // Installed as a dependency: vendor/cofa/php-issues-checker/bin
+    __DIR__ . '/../../../autoload.php',
+    // Developing this package
+    __DIR__ . '/../vendor/autoload.php',
+];
+
+if (isset($GLOBALS['_composer_autoload_path'])) {
+    array_unshift($autoloaders, $GLOBALS['_composer_autoload_path']);
+}
+
+foreach ($autoloaders as $autoloader) {
+    if (is_file($autoloader)) {
+        require $autoloader;
+        break;
+    }
+}
+
+if (!class_exists(\PhpIssuesChecker\Cli\Application::class)) {
+    fwrite(STDERR, "Cannot find the Composer autoloader. Run \"composer install\" first.\n");
+    exit(2);
+}
+
+exit((new \PhpIssuesChecker\Cli\Application())->run($_SERVER['argv'] ?? []));

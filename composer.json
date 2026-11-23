@@ -1,0 +1,44 @@
+{
+    "name": "cofa/php-issues-checker",
+    "description": "Checks your PHP runtime against officially reported PHP security issues (php.net + php/php-src advisories) and tells you how to protect yourself.",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "keywords": ["php", "security", "cve", "audit", "vulnerability", "end-of-life", "php.ini", "hardening"],
+    "authors": [
+        {
+            "name": "Mahmoud Gamal"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "composer-plugin-api": "^2.0"
+    },
+    "require-dev": {
+        "composer/composer": "^2.0",
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpIssuesChecker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpIssuesChecker\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/php-issues-check"
+    ],
+    "extra": {
+        "class": "PhpIssuesChecker\\Composer\\Plugin"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "update-data": "@php scripts/update-data.php"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
